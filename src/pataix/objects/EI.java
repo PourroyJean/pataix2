@@ -2,6 +2,7 @@ package pataix.objects;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.location.Location;
 
 public class EI {
