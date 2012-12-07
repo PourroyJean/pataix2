@@ -1,13 +1,14 @@
 package pataix.objects;
 
-import android.location.Location;
 import org.json.*;
 
+import android.location.Location;
+
 public class ALimits {
-	protected String latMin;
-	protected String latMax;
-	protected String longMin;
-	protected String longMax;
+	protected String latMin = "0";
+	protected String latMax = "0";
+	protected String longMin = "0";
+	protected String longMax = "0";
 	
 	public ALimits (Location position, double distance){
 		double difDegLat = ((distance * 90.0)/40075.01);
@@ -17,6 +18,8 @@ public class ALimits {
 		longMin = "" + (position.getLongitude() - difDegLong);
 		longMax = "" + (position.getLongitude() + difDegLong);
 	}
+	
+	public ALimits () {}
 	
 	public JSONObject ToJson() throws JSONException
 	{
