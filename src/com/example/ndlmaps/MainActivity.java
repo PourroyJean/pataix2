@@ -2,17 +2,20 @@
 
 package com.example.ndlmaps;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+
 import pataix.data.ADataSelect;
 import pataix.geoloc.APosition;
-import pataix.objects.AComClientMap;
 import pataix.objects.ALimits;
 import pataix.objects.EI;
+import pataix.objects.RecupEI;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -25,9 +28,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.maps.*;
 
 public class MainActivity extends MapActivity {
@@ -91,7 +91,7 @@ public class MainActivity extends MapActivity {
 				double latitude  = pos.getPosition().getLatitude();
 		 		double longitude = pos.getPosition().getLongitude();
 		 		mc.setCenter(new GeoPoint((int) (latitude * 1000000.0),(int) (longitude * 1000000.0)));
-		 		
+ 		
 		 		 limits = new ALimits(pos.getPosition(), limit);
 		 		
 			      new AsyncLoadOpenData().execute(null);
@@ -228,9 +228,11 @@ public class MainActivity extends MapActivity {
 	}
      
 	private class AsyncLoadOpenData extends AsyncTask<Void, Void, Void> {
-
+		RecupEI recup;
 		@Override
 		protected Void doInBackground(Void... params) {
+			recup = new RecupEI(limits);
+			recup.start();
 			ADataSelect select = new ADataSelect("http://dataprovence.cloudapp.net:8080/v1/dataprovencetourisme/MonumentsEtStesCulturels/?format=json");
 			Log.w("JSON","Gnak de DL");
 			LieuxOpenData = select.SearchItem(limits);
@@ -243,7 +245,14 @@ public class MainActivity extends MapActivity {
 		
 		@Override
 		protected void onPostExecute(Void result) {
+			
 
+			ArrayList<EI> nouveaux = new ArrayList<EI>();
+			nouveaux = recup.getTabMonum();
+			for (EI i : nouveaux) {
+				Log.w("Map", "add" + i.GetNom());
+				LieuxOpenData.add(i);
+			}
 	 		Drawable marker=getResources().getDrawable(R.drawable.marker);
 		    
 		    marker.setBounds(0, 0, marker.getIntrinsicWidth(),
@@ -253,6 +262,7 @@ public class MainActivity extends MapActivity {
 		    
 		    me=new MyLocationOverlay(getApplicationContext(), mapView);
 		    mapView.getOverlays().add(me);
+
 		}
 	}
 	
@@ -264,9 +274,6 @@ public class MainActivity extends MapActivity {
 		      
 		      boundCenterBottom(marker);
 		      
-		      //AComClientMap com = new AComClientMap(limits);
-		      
-		      //ArrayList<EI> Lieux = com.getTabMonum();
 		      for (EI elem : LieuxOpenData) {
 		    	  Log.w("Map",  elem.GetLocation().getLatitude() + " " + elem.GetLocation().getLongitude()  + " " + elem.GetNom());
 		    	  items.add(new OverlayItem(new GeoPoint((int) (elem.GetLocation().getLatitude()*1000000), (int) (elem.GetLocation().getLongitude()*1000000)), elem.GetNom(), elem.GetDescription()));
@@ -283,8 +290,13 @@ public class MainActivity extends MapActivity {
 		    @Override
 		    protected boolean onTap(int i) 
 		    {
-		    	Intent myIntent = new Intent(getApplicationContext(),BulleActivity.class);
+		    	Log.w("Map", "ontap");
+		        Bundle objetbunble = new Bundle();
+                objetbunble.putString("arg1", ""+items.get(i).getTitle());
+    			objetbunble.putString("arg2", ""+items.get(i).getSnippet());
 		    	
+		    	Intent myIntent = new Intent(getApplicationContext(),BulleActivity.class);
+		    	startActivityForResult(myIntent, 0);
 		      
 		      return(true);
 		    }

@@ -31,9 +31,8 @@ public class EI {
 		description = a_description;
 	}
 	
-	public JSONObject ToJson() throws JSONException
+	public JSONObject ToJson(JSONObject jsonRes) throws JSONException
 	{
-		JSONObject jsonRes= new JSONObject();
 		jsonRes.put("id", id);
 		jsonRes.put("latitude", loc.getLatitude());
 		jsonRes.put("longitude", loc.getLongitude());

@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 
 public class BulleActivity extends Activity 
 {
@@ -16,6 +18,19 @@ public class BulleActivity extends Activity
 		setContentView(R.layout.activity_bulle);
 		
 		bFin = (Button) findViewById(R.id.xFinish);
+		
+		Bundle objetbunble  = this.getIntent().getExtras();
+		if (objetbunble != null && objetbunble.containsKey("longitude") && objetbunble.containsKey("latitude")) 
+		{}	
+		
+		//******* Initialisation de valeurs
+		String title = (this.getIntent().getStringExtra("arg1"));
+        String descr = (this.getIntent().getStringExtra("arg2"));
+        
+        EditText E1 = (EditText) findViewById(R.id.xDescr);
+        E1.setText(descr);
+        
+		
 		
 		bFin.setOnClickListener(new OnClickListener() {
 			

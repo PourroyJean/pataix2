@@ -16,9 +16,8 @@ public class Media {
 		mediatype = a_mediatype;
 	}
 	
-	public JSONObject ToJson() throws JSONException
+	public JSONObject ToJson(JSONObject jsonRes) throws JSONException
 	{
-		JSONObject jsonRes= new JSONObject();
 		jsonRes.put("id", id);
 		jsonRes.put("url", url);
 		jsonRes.put("mediatype", mediatype);

@@ -1,5 +1,11 @@
 package com.example.ndlmaps;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
+import org.json.JSONException;
+
+import pataix.objects.AEnvoiEI;
 import pataix.objects.EI;
 import android.app.Activity;
 import android.content.Intent;
@@ -64,7 +70,7 @@ public class AFormulaire  extends Activity{
 			public void onClick(View v) {
 	
 				
-				//add base de donnée peyrobn 
+				//add base de donnï¿½e peyrobn 
 				Id = "1";				
 				Nom = editNom.getText().toString();
 				Notation = Rating.getRating();
@@ -74,6 +80,10 @@ public class AFormulaire  extends Activity{
 				
 				EI Obj = new EI(Id, latitude, longitude, Nom, Notation, Description);
 		
+				
+				new AEnvoiEI(Obj).start();
+
+				
 				Log.w("69",Notation+"" );
 				retour = editNom.getText().toString();
 				Intent intent = This.getIntent();
