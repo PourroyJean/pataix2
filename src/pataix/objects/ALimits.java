@@ -21,9 +21,8 @@ public class ALimits {
 	
 	public ALimits () {}
 	
-	public JSONObject ToJson() throws JSONException
+	public JSONObject ToJson(JSONObject jsonRes) throws JSONException
 	{
-		JSONObject jsonRes= new JSONObject();
 		jsonRes.put("latMin", latMin);
 		jsonRes.put("latMax", latMax);
 		jsonRes.put("longMin", longMin);

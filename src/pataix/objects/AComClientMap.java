@@ -13,16 +13,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AComClientMap {
-	ArrayList<EI> TabMonum = new ArrayList<EI>();
+	protected ArrayList<EI> TabMonum = new ArrayList<EI>();
 	
-	AComClientMap(ALimits Coord) throws UnknownHostException, IOException, JSONException{
+	public ArrayList<EI> getTabMonum() {
+		return TabMonum;
+	}
+
+	public AComClientMap(ALimits Coord) throws UnknownHostException, IOException, JSONException{
 		Socket connecServ = new Socket("allegro.tar-gz.fr", 50007);
 		BufferedWriter out = new BufferedWriter(new
 				OutputStreamWriter(connecServ.getOutputStream()));
 		BufferedReader in = new BufferedReader(new
 				InputStreamReader(connecServ.getInputStream()));
+		String Action = "getEI";
+		JSONObject ActionJson= new JSONObject();
+		ActionJson.put("action", Action);
+		out.write(Coord.ToJson(ActionJson).toString());
 		
-		out.write(Coord.ToJson().toString());
 		JSONObject AStocker = new JSONObject (in.readLine());
 		for (int i = 0 ; i < AStocker.length() ; ++i)
 		{
