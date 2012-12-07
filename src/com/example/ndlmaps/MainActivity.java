@@ -2,13 +2,22 @@
 
 package com.example.ndlmaps;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import pataix.data.ADataSelect;
 import pataix.geoloc.APosition;
+import pataix.objects.AComClientMap;
+import pataix.objects.ALimits;
+import pataix.objects.EI;
 
 import com.google.android.maps.*;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -17,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends MapActivity {
 	
@@ -29,7 +39,10 @@ public class MainActivity extends MapActivity {
 	TextView txtLatitude;
 	
 	private MyLocationOverlay myLocation = null;
+	private MyLocationOverlay me;
 	
+	private ArrayList<EI> LieuxOpenData = new ArrayList<EI>();
+	private ALimits limits;
 	
 	
 	
@@ -78,8 +91,13 @@ public class MainActivity extends MapActivity {
 		 		txtLatitude.setText(latitude + "");
 		 		txtLongitude.setText(longitude + "");
 //				
+		 		 limits = new ALimits(pos.getPosition(), 10000);
+		 		
+			      new AsyncLoadOpenData().execute(null);
+			      
 			}
 		});
+		
 		
 	}
 
@@ -198,17 +216,81 @@ public class MainActivity extends MapActivity {
         
         return super.dispatchTouchEvent(ev);
 	}
+     
+	private class AsyncLoadOpenData extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			ADataSelect select = new ADataSelect("http://dataprovence.cloudapp.net:8080/v1/dataprovencetourisme/MonumentsEtStesCulturels/?format=json");
+  		  	LieuxOpenData = select.SearchItem(limits);
+  		  	Log.w("JSON","Fin de DL");
+  		  	
+
+			return null;
+		}
+
+		
+		@Override
+		protected void onPostExecute(Void result) {
+
+	 		Drawable marker=getResources().getDrawable(R.drawable.marker);
+		    
+		    marker.setBounds(0, 0, marker.getIntrinsicWidth(),
+		                            marker.getIntrinsicHeight());
+		    
+		    mapView.getOverlays().add(new SitesOverlay(marker));
+		    
+		    me=new MyLocationOverlay(getApplicationContext(), mapView);
+		    mapView.getOverlays().add(me);
+		}
+	}
+	
+	 private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
+		    private List<OverlayItem> items=new ArrayList<OverlayItem>();
+		    
+		    public SitesOverlay(Drawable marker) {
+		      super(marker);
+		      
+		      boundCenterBottom(marker);
+		      
+		      //AComClientMap com = new AComClientMap(limits);
+		      
+		      //ArrayList<EI> Lieux = com.getTabMonum();
+		      for (EI elem : LieuxOpenData) {
+		    	  Log.w("Map",  elem.GetLocation().getLatitude() + " " + elem.GetLocation().getLongitude()  + " " + elem.GetNom());
+		    	  items.add(new OverlayItem(new GeoPoint((int) (elem.GetLocation().getLatitude()*1000000), (int) (elem.GetLocation().getLongitude()*1000000)), elem.GetNom(), elem.GetDescription()));
+		      }
+
+		      populate();
+		    }
+		    
+		    @Override
+		    protected OverlayItem createItem(int i) {
+		      return(items.get(i));
+		    }
+		    
+		    @Override
+		    protected boolean onTap(int i) {
+		      
+		      return(true);
+		    }
+		    
+		    @Override
+		    public int size() {
+		      return(items.size());
+		    }
+	 }
         
-        
-        private int minMillisecondThresholdForLongClick = 800;
-        private long startTimeForLongClick = 0;
-        private float xScreenCoordinateForLongClick;
-        private float yScreenCoordinateForLongClick;
-        private float xtolerance=10;//x pixels that your finger can be off but still constitute a long press
-        private float ytolerance=10;//y pixels that your finger can be off but still constitute a long press
-        private float xlow; //actual screen coordinate when you subtract the tolerance
-        private float xhigh; //actual screen coordinate when you add the tolerance
-        private float ylow; //actual screen coordinate when you subtract the tolerance
-        private float yhigh; //actual screen coordinate when you add the tolerance
+    private int minMillisecondThresholdForLongClick = 800;
+    private long startTimeForLongClick = 0;
+    private float xScreenCoordinateForLongClick;
+    private float yScreenCoordinateForLongClick;
+    private float xtolerance=10;//x pixels that your finger can be off but still constitute a long press
+    private float ytolerance=10;//y pixels that your finger can be off but still constitute a long press
+    private float xlow; //actual screen coordinate when you subtract the tolerance
+    private float xhigh; //actual screen coordinate when you add the tolerance
+    private float ylow; //actual screen coordinate when you subtract the tolerance
+    private float yhigh; //actual screen coordinate when you add the tolerance
+    
 
 }

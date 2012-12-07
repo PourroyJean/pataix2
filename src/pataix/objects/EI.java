@@ -7,7 +7,7 @@ import android.location.Location;
 
 public class EI {
 	protected String id;
-	protected Location loc;
+	protected Location loc = new Location("");
 	protected String nom;
 	protected double note;
 	protected String description;
