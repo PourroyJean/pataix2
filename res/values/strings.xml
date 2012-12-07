@@ -5,6 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="string">Settings</string>
-	<string name="mapKey">0lj_EhLjVYoT2DomOrB0txOlCvNYsnNDhVp4qZw</string>
-
+	<string name="mapKey">06gFsmkRHD8CzAPyEBaohG5ILA6IzehK9bWCGdA</string>
+	<string name="nom">"Nom du lieu :  "</string>
+	<string name="vide">"                        "</string>
+	<string name="valider">Valider</string>
 </resources>
