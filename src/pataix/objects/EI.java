@@ -21,6 +21,15 @@ public class EI {
 		description = elem.description;
 	}
 	
+	public EI (String a_id, double latitude, double longitude, String a_nom, double a_note, String a_description) {
+		id = a_id;
+		loc.setLatitude(latitude);
+		loc.setLongitude(longitude);
+		nom = a_nom;
+		note = a_note;
+		description = a_description;
+	}
+	
 	public JSONObject ToJson() throws JSONException
 	{
 		JSONObject jsonRes= new JSONObject();
