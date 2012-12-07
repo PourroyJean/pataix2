@@ -11,13 +11,12 @@ import pataix.objects.AComClientMap;
 import pataix.objects.ALimits;
 import pataix.objects.EI;
 
-import com.google.android.maps.*;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -25,8 +24,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.maps.*;
 
 public class MainActivity extends MapActivity {
 	
@@ -35,8 +37,9 @@ public class MainActivity extends MapActivity {
 	private GeoPoint location;
 	private APosition pos;
 	private Button refresh ;
-	TextView txtLongitude;
-	TextView txtLatitude;
+	EditText editLimit;
+	private int limit;
+
 	
 	private MyLocationOverlay myLocation = null;
 	private MyLocationOverlay me;
@@ -58,14 +61,15 @@ public class MainActivity extends MapActivity {
 		
 		 mapView = (MapView) this.findViewById(com.example.ndlmaps.R.id.mapView);
 		 pos = new APosition(this);
-		 txtLongitude = (TextView)findViewById(R.id.xlongitude);
-		 txtLatitude = (TextView)findViewById(R.id.xlatitude);
+
 		 mc = mapView.getController();
 		 
 		 
 		 myLocation = new MyLocationOverlay(getApplicationContext(), mapView);
 		 mapView.getOverlays().add(myLocation);
 		 
+		 editLimit = (EditText)findViewById(R.id.xLimit);
+		 limit = Integer.parseInt(editLimit.getText().toString());
 		 
 		 //************bouton Zoom***********************
 		 mapView.setBuiltInZoomControls(true);
@@ -79,7 +83,8 @@ public class MainActivity extends MapActivity {
 			public void onClick(View v) 
 			{
 				// TODO Auto-generated method stub
-				
+				 limit = Integer.parseInt(editLimit.getText().toString());
+				 Log.w("69",limit+"" );
 				 myLocation = new MyLocationOverlay(getApplicationContext(), mapView);
 				 mapView.getOverlays().add(myLocation);
 				 myLocation.enableMyLocation();
@@ -87,14 +92,10 @@ public class MainActivity extends MapActivity {
 		 		double longitude = pos.getPosition().getLongitude();
 		 		mc.setCenter(new GeoPoint((int) (latitude * 1000000.0),(int) (longitude * 1000000.0)));
 		 		
-//		 		
-		 		txtLatitude.setText(latitude + "");
-		 		txtLongitude.setText(longitude + "");
-//				
 		 		 limits = new ALimits(pos.getPosition(), 10000);
 		 		
 			      new AsyncLoadOpenData().execute(null);
-			      
+
 			}
 		});
 		
@@ -204,9 +205,17 @@ public class MainActivity extends MapActivity {
                         //**** here's where you add code to: 
                         // put a marker on the map, save the point to your SQLite database, etc
 
+                        //********************* JEAN : creation bundle ************
+                        Bundle objetbunble = new Bundle();
+                        objetbunble.putString("longitude", longitude +"");
+            			objetbunble.putString("latitude", latitude + "");
+            			
+            			
+                        
         				Log.w("Map", longitude + " " + latitude);
         				Intent myIntent = new Intent(getApplicationContext(), AFormulaire.class);
-                        startActivityForResult(myIntent, 0);
+        				myIntent.putExtras(objetbunble);
+        				startActivityForResult(myIntent, 0);
         				
                     }
                 }
