@@ -92,7 +92,7 @@ public class MainActivity extends MapActivity {
 		 		double longitude = pos.getPosition().getLongitude();
 		 		mc.setCenter(new GeoPoint((int) (latitude * 1000000.0),(int) (longitude * 1000000.0)));
 		 		
-		 		 limits = new ALimits(pos.getPosition(), 10000);
+		 		 limits = new ALimits(pos.getPosition(), limit);
 		 		
 			      new AsyncLoadOpenData().execute(null);
 
@@ -213,7 +213,8 @@ public class MainActivity extends MapActivity {
             			
                         
         				Log.w("Map", longitude + " " + latitude);
-        				Intent myIntent = new Intent(getApplicationContext(), AFormulaire.class);
+        				Intent myIntent = new Intent(getApplicationContext(),AFormulaire.class);
+        				
         				myIntent.putExtras(objetbunble);
         				startActivityForResult(myIntent, 0);
         				
@@ -231,7 +232,8 @@ public class MainActivity extends MapActivity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			ADataSelect select = new ADataSelect("http://dataprovence.cloudapp.net:8080/v1/dataprovencetourisme/MonumentsEtStesCulturels/?format=json");
-  		  	LieuxOpenData = select.SearchItem(limits);
+			Log.w("JSON","Gnak de DL");
+			LieuxOpenData = select.SearchItem(limits);
   		  	Log.w("JSON","Fin de DL");
   		  	
 
@@ -279,7 +281,10 @@ public class MainActivity extends MapActivity {
 		    }
 		    
 		    @Override
-		    protected boolean onTap(int i) {
+		    protected boolean onTap(int i) 
+		    {
+		    	Intent myIntent = new Intent(getApplicationContext(),BulleActivity.class);
+		    	
 		      
 		      return(true);
 		    }

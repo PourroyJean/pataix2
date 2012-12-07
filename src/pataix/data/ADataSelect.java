@@ -57,11 +57,11 @@ public class ADataSelect
 	            double latitudeItem  = Double.parseDouble(jsonObject.getString("latitude"));
 	            double longitudeItem = Double.parseDouble(jsonObject.getString("longitude"));	    
 	   
-//		        if (latitudeItem  > Double.parseDouble(limits.GetlatMin())  &&  
-//		        	latitudeItem  < Double.parseDouble(limits.GetlatMax())  &&
-//		        	longitudeItem > Double.parseDouble(limits.GetlongMin()) &&
-//		        	longitudeItem < Double.parseDouble(limits.GetlongMax()))
-//		        {
+		        if (latitudeItem  > Double.parseDouble(limits.GetlatMin())  &&  
+		        	latitudeItem  < Double.parseDouble(limits.GetlatMax())  &&
+		        	longitudeItem > Double.parseDouble(limits.GetlongMin()) &&
+		        	longitudeItem < Double.parseDouble(limits.GetlongMax()))
+		        {
 
 		        	//On construit les objets ADataItem et on les ajoute dans le tableau
 			        String entityId     = new String(jsonObject.getString("entityid"));
@@ -69,7 +69,7 @@ public class ADataSelect
 			        String nom          = new String(jsonObject.getString("raisonsociale"));
 			        
 			        VectADataItem.add(new EI(entityId, latitudeItem, longitudeItem, nom, 0, desc));
-//		        }
+		        }
 		    
 		           
 	        }

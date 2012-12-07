@@ -18,7 +18,7 @@ public class AEnvoiEI {
 		String Action = "uploadEI";
 		JSONObject EnvoiEI= new JSONObject();
 		EnvoiEI.put("action", Action);
-		out.write(Monum.ToJson(EnvoiEI).toString());
+		//out.write(Monum.ToJson(EnvoiEI).toString());
 		out.close();
 		connecServ.close();
 	}

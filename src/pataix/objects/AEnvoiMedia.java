@@ -18,7 +18,7 @@ public class AEnvoiMedia {
 		String Action = "uploadMedia";
 		JSONObject EnvoiMedia= new JSONObject();
 		EnvoiMedia.put("action", Action);
-		out.write(Donnee.ToJson(EnvoiMedia).toString());
+		//out.write(Donnee.ToJson(EnvoiMedia).toString());
 		out.close();
 		connecServ.close();
 	}
